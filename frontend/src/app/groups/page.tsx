@@ -389,13 +389,13 @@ function GroupDetailModal({ group, onClose, onDelete }: { group: Group; onClose:
           </div>
 
           {/* Suggested assignment types */}
-          {insight?.suggestedAssignmentTypes?.length > 0 && (
+          {(insight?.suggestedAssignmentTypes?.length ?? 0) > 0 && (
             <div className="bg-gray-50 rounded-xl p-4">
               <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
                 <TrendingUp className="w-3.5 h-3.5" /> Suggested Practice
               </p>
               <div className="flex flex-wrap gap-2">
-                {insight.suggestedAssignmentTypes.map((t, i) => (
+                {insight?.suggestedAssignmentTypes?.map((t, i) => (
                   <span key={i} className="text-xs bg-white border border-gray-200 text-gray-700 px-2.5 py-1 rounded-full">{t}</span>
                 ))}
               </div>
