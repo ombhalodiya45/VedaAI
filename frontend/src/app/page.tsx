@@ -51,7 +51,7 @@ const QUICK_ACTIONS = [
 
 export default function HomePage() {
   const router = useRouter();
-  const { user } = useAuthStore();
+  const { user, loading: authLoading } = useAuthStore();
   const { assignments, setAssignments } = useAssignmentStore();
   const [loadingAssignments, setLoadingAssignments] = useState(true);
 
@@ -63,12 +63,13 @@ export default function HomePage() {
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
 
   useEffect(() => {
-    if (!user) return;
+    if (authLoading) return;
+    if (!user) { setLoadingAssignments(false); return; }
     fetch(`${API_URL}/api/assignments?userId=${user.id}`)
       .then(r => r.json())
       .then((data: Assignment[]) => { setAssignments(Array.isArray(data) ? data : []); setLoadingAssignments(false); })
       .catch(() => setLoadingAssignments(false));
-  }, [user, setAssignments]);
+  }, [user, authLoading, setAssignments]);
 
   const completed = assignments.filter(a => a.status === 'completed').length;
   const pending   = assignments.filter(a => a.status === 'pending' || a.status === 'processing').length;
@@ -165,13 +166,15 @@ export default function HomePage() {
             </div>
           ) : recent.length === 0 ? (
             <div className="bg-white rounded-2xl border border-gray-100 p-8 text-center">
-              <p className="text-sm text-gray-400 mb-3">No question papers yet.</p>
-              <button
-                onClick={() => router.push('/create')}
-                className="text-sm font-semibold text-gray-700 underline"
-              >
-                Create your first one
-              </button>
+              <p className="text-sm text-gray-400 mb-3">No papers available.</p>
+              {user && (
+                <button
+                  onClick={() => router.push('/create')}
+                  className="text-sm font-semibold text-gray-700 underline"
+                >
+                  Create your first one
+                </button>
+              )}
             </div>
           ) : (
             <div className="space-y-2">

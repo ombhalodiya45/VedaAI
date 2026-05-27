@@ -344,7 +344,7 @@ function AssignmentsContent() {
 
         {/* Floating Create button — only when assignments exist */}
         {filtered.length > 0 && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 no-print">
+          <div className="fixed bottom-[90px] lg:bottom-6 left-1/2 -translate-x-1/2 z-20 no-print">
             <button
               onClick={() => router.push('/create')}
               className="flex items-center gap-2 px-7 py-3.5 bg-gray-900 text-white text-sm font-semibold rounded-full shadow-xl hover:bg-black transition-colors"

@@ -43,9 +43,10 @@ export function AuthModal({ onClose, redirectMessage }: AuthModalProps) {
     setLoading(true);
     try {
       const supabase = createClient();
+      const base = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: `${window.location.origin}/` },
+        options: { redirectTo: `${base}/auth/callback` },
       });
       if (error) {
         toast.error(error.message || 'Google sign-in failed');
@@ -61,15 +62,35 @@ export function AuthModal({ onClose, redirectMessage }: AuthModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center">
+      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center">
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
           <X className="w-5 h-5" />
         </button>
 
-        {/* Logo */}
-        <div className="flex justify-center mb-5">
-          <Image src="/logo.svg" alt="VedaAI" width={48} height={48}
-            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+        {/* Desktop logo — square icon, large */}
+        <div className="hidden sm:flex justify-center mb-5">
+          <Image
+            src="/logo.svg"
+            alt="VedaAI"
+            width={80}
+            height={80}
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+          />
+        </div>
+
+        {/* Mobile logo — horizontal wordmark */}
+        <div className="flex sm:hidden justify-center mb-5">
+          <Image
+            src="/mobile_logo.svg"
+            alt="VedaAI"
+            width={160}
+            height={44}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/logo.svg';
+              (e.target as HTMLImageElement).width = 80;
+              (e.target as HTMLImageElement).height = 80;
+            }}
+          />
         </div>
 
         <h2 className="text-xl font-bold text-gray-900 mb-1">Sign in to VedaAI</h2>

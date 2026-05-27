@@ -1,39 +1,36 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { LayoutGrid, ClipboardList, BookMarked, Sparkles } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { LayoutGrid, ClipboardList, BookMarked, Sparkles, Users } from 'lucide-react';
 
 const TABS = [
-  { id: 'home',        label: 'Home',        icon: LayoutGrid,    href: '#'  },
-  { id: 'assignments', label: 'Assignments',  icon: ClipboardList, href: '/'  },
-  { id: 'library',     label: 'Library',      icon: BookMarked,    href: '#'  },
-  { id: 'toolkit',     label: 'AI Toolkit',   icon: Sparkles,      href: '#'  },
+  { id: 'home',        label: 'Home',        icon: LayoutGrid,    href: '/'            },
+  { id: 'groups',      label: 'Groups',      icon: Users,         href: '/groups'      },
+  { id: 'assignments', label: 'Assignments', icon: ClipboardList, href: '/assignments' },
+  { id: 'library',     label: 'Library',     icon: BookMarked,    href: '/library'     },
+  { id: 'toolkit',     label: 'Toolkit',     icon: Sparkles,      href: '/toolkit'     },
 ];
 
 interface MobileBottomBarProps {
   activeTab?: string;
 }
 
-export function MobileBottomBar({ activeTab = 'assignments' }: MobileBottomBarProps) {
+export function MobileBottomBar({ activeTab = 'home' }: MobileBottomBarProps) {
   const router = useRouter();
 
   return (
     <div className="fixed bottom-[10px] left-[10px] right-[10px] z-30">
       <nav
-        className="flex items-center justify-around px-2 py-3"
-        style={{
-          background: '#1C1C1E',
-          borderRadius: 16,
-        }}
+        className="flex items-center justify-around px-1 py-3"
+        style={{ background: '#1C1C1E', borderRadius: 16 }}
       >
         {TABS.map(({ id, label, icon: Icon, href }) => {
           const isActive = activeTab === id;
           return (
             <button
               key={id}
-              onClick={() => { if (href !== '#') router.push(href); }}
-              className="flex flex-col items-center gap-1 px-4 py-1"
+              onClick={() => router.push(href)}
+              className="flex flex-col items-center gap-1 flex-1 py-1"
             >
               <Icon
                 className="w-5 h-5"
@@ -41,7 +38,7 @@ export function MobileBottomBar({ activeTab = 'assignments' }: MobileBottomBarPr
                 strokeWidth={isActive ? 2.2 : 1.8}
               />
               <span
-                className="text-[11px] font-medium"
+                className="text-[10px] font-medium"
                 style={{ color: isActive ? '#FFFFFF' : 'rgba(255,255,255,0.25)' }}
               >
                 {label}

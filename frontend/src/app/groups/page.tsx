@@ -389,13 +389,13 @@ function GroupDetailModal({ group, onClose, onDelete }: { group: Group; onClose:
           </div>
 
           {/* Suggested assignment types */}
-          {insight?.suggestedAssignmentTypes?.length > 0 && (
+          {(insight?.suggestedAssignmentTypes?.length ?? 0) > 0 && (
             <div className="bg-gray-50 rounded-xl p-4">
               <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
                 <TrendingUp className="w-3.5 h-3.5" /> Suggested Practice
               </p>
               <div className="flex flex-wrap gap-2">
-                {insight.suggestedAssignmentTypes.map((t, i) => (
+                {insight?.suggestedAssignmentTypes?.map((t, i) => (
                   <span key={i} className="text-xs bg-white border border-gray-200 text-gray-700 px-2.5 py-1 rounded-full">{t}</span>
                 ))}
               </div>
@@ -580,7 +580,7 @@ export default function GroupsPage() {
               </div>
             )}
 
-            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30">
+            <div className="fixed bottom-[90px] lg:bottom-6 left-1/2 -translate-x-1/2 z-20">
               <button onClick={() => setShowCreate(true)}
                 className="flex items-center gap-2 px-7 py-3.5 bg-gray-900 text-white text-sm font-semibold rounded-full shadow-xl hover:bg-black transition-colors">
                 <Plus className="w-4 h-4" /> New Group
