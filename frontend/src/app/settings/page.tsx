@@ -36,7 +36,7 @@ export default function SettingsPage() {
     if (!isSupabaseConfigured()) return;
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push('/login');
+    router.push('/');
   };
 
   const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'My Account';
