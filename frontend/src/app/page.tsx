@@ -73,7 +73,7 @@ export default function HomePage() {
 
   const completed = assignments.filter(a => a.status === 'completed').length;
   const pending   = assignments.filter(a => a.status === 'pending' || a.status === 'processing').length;
-  const recent    = assignments.filter(a => a.status === 'completed').slice(0, 3);
+  const recent    = assignments.slice(0, 3);
 
   const STATS = [
     { icon: FileText,     label: 'Total Papers',      value: assignments.length, color: 'text-gray-900' },
@@ -193,9 +193,13 @@ export default function HomePage() {
                       <p className="text-xs text-gray-400 truncate">{a.subject} · {a.gradeLevel}</p>
                     </div>
                   </div>
-                  <span className="shrink-0 text-xs font-semibold text-green-600 bg-green-50 px-2.5 py-1 rounded-full border border-green-200">
-                    Ready
-                  </span>
+                  {a.status === 'completed' ? (
+                    <span className="shrink-0 text-xs font-semibold text-green-600 bg-green-50 px-2.5 py-1 rounded-full border border-green-200">Ready</span>
+                  ) : a.status === 'failed' ? (
+                    <span className="shrink-0 text-xs font-semibold text-red-500 bg-red-50 px-2.5 py-1 rounded-full border border-red-200">Failed</span>
+                  ) : (
+                    <span className="shrink-0 text-xs font-semibold text-amber-500 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">Generating…</span>
+                  )}
                 </button>
               ))}
             </div>
