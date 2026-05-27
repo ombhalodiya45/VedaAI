@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Save, LogOut, Trash2, User, School, Bell } from 'lucide-react';
+import { Save, LogOut, LogIn, Trash2, User, School, Bell } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useNotificationStore } from '@/store/useNotificationStore';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase';
+import { AuthModal } from '@/components/ui/AuthModal';
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function SettingsPage() {
 
   const [schoolInput, setSchoolInput] = useState(schoolName);
   const [saving, setSaving] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
 
   useEffect(() => { setSchoolInput(schoolName); }, [schoolName]);
 
@@ -108,34 +110,50 @@ export default function SettingsPage() {
             <Bell className="w-4 h-4 text-gray-400" />
             <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Notifications</h2>
           </div>
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-600">Clear all notification history</p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs lg:text-sm text-gray-600">Clear all notification history</p>
             <button
               onClick={() => { clearAll(); toast.success('Notifications cleared'); }}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 text-sm font-medium text-red-500 hover:bg-red-50 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 lg:px-4 lg:py-2 rounded-xl border border-gray-200 text-xs lg:text-sm font-medium text-red-500 hover:bg-red-50 transition-colors whitespace-nowrap shrink-0"
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
               Clear All
             </button>
           </div>
         </section>
 
-        {/* Sign out */}
+        {/* Sign out / Sign in */}
         <section className="bg-white rounded-2xl border border-gray-100 p-5">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-semibold text-gray-800">Sign out</p>
-              <p className="text-xs text-gray-400 mt-0.5">You'll be returned to the login screen.</p>
+              <p className="text-xs lg:text-sm font-semibold text-gray-800">
+                {user ? 'Sign out' : 'Sign in'}
+              </p>
+              <p className="text-xs text-gray-400 mt-0.5">
+                {user ? "You'll be returned to the login screen." : 'Sign in to access all features.'}
+              </p>
             </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition-colors"
-            >
-              <LogOut className="w-4 h-4" />
-              Sign out
-            </button>
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-1.5 px-3 py-2 lg:px-5 lg:py-2.5 rounded-xl bg-red-500 text-white text-xs lg:text-sm font-semibold hover:bg-red-600 transition-colors whitespace-nowrap shrink-0"
+              >
+                <LogOut className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
+                Sign out
+              </button>
+            ) : (
+              <button
+                onClick={() => setShowAuth(true)}
+                className="flex items-center gap-1.5 px-3 py-2 lg:px-5 lg:py-2.5 rounded-xl bg-gray-900 text-white text-xs lg:text-sm font-semibold hover:bg-black transition-colors whitespace-nowrap shrink-0"
+              >
+                <LogIn className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
+                Sign in
+              </button>
+            )}
           </div>
         </section>
+
+        {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
 
       </div>
     </AppLayout>

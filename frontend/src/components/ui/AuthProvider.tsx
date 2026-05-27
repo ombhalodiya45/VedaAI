@@ -19,6 +19,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const supabase = createClient();
 
+    // Client-side PKCE fallback: exchange code if present in URL
+    const code = new URLSearchParams(window.location.search).get('code');
+    if (code) {
+      supabase.auth.exchangeCodeForSession(code).catch(() => {});
+      const url = new URL(window.location.href);
+      url.searchParams.delete('code');
+      window.history.replaceState({}, '', url.toString());
+    }
+
     const loadSchool = (userId: string) => {
       const stored = localStorage.getItem(`vedaai_school_${userId}`);
       if (stored) {

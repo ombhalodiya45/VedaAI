@@ -580,7 +580,7 @@ export default function GroupsPage() {
               </div>
             )}
 
-            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30">
+            <div className="fixed bottom-[90px] lg:bottom-6 left-1/2 -translate-x-1/2 z-20">
               <button onClick={() => setShowCreate(true)}
                 className="flex items-center gap-2 px-7 py-3.5 bg-gray-900 text-white text-sm font-semibold rounded-full shadow-xl hover:bg-black transition-colors">
                 <Plus className="w-4 h-4" /> New Group
